@@ -6,7 +6,7 @@
 
 geometry is a minimalistic, fully customizable zsh prompt theme.
 
-![geometry](screenshots/geometry.png)
+![geometry](screenshots/screencast.gif)
 
 geometry starts small, with good defaults, and allows you to customize it at your own will. It can be as simple or complex as you like.
 
@@ -67,6 +67,7 @@ In a nutshell, it can:
 - display current git branch, state and time since last commit
 - tell you whether you need to pull, push or if you're mid-rebase
 - display the number of conflicting files and total number of conflicts
+- display if there is a stash
 - display the running time of long running commands
 - set the terminal title to current command and directory
 - make you the coolest hacker in the whole Starbucks
@@ -220,6 +221,10 @@ variables before geometry is loaded**.
 [Relevant xkcd](http://xkcd.com/1726/)
 
 This is a [known problem](https://github.com/geometry-zsh/geometry/issues/3#issuecomment-244875921) due to the use of unicode characters. It should be fixed right now. If it persists, update geometry and check if the terminal version reported by zsh matches your terminal emulator reported version. Please comment on that thread if any new issues arise.
+
+**My syntax highlighting gets thrown off in version controled directories...**
+
+Yeah, turns out this might be an issue with `zsh-syntax-highlighting` [as described here](https://github.com/geometry-zsh/geometry/issues/214#issuecomment-396057863). We recommend trying [`zdharma/fast-syntax-highlighting`](https://github.com/zdharma/fast-syntax-highlighting) instead. If the problem persists, [comment on this issue](https://github.com/geometry-zsh/geometry/issues/214).
 
 **There are too many/few spaces after the symbol or the prompt.**
 

@@ -28,7 +28,7 @@ typeset -g geometry_time_color
     human="${seconds}s"
     color=${color:-$GEOMETRY_COLOR_TIME_SHORT}
   fi
-  
+
   geometry_time_color=$color
   geometry_time_human=$human
 }

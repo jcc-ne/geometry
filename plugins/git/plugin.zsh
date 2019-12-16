@@ -6,6 +6,47 @@ GEOMETRY_COLOR_GIT_CONFLICTS_UNSOLVED=${GEOMETRY_COLOR_GIT_CONFLICTS_UNSOLVED:-r
 GEOMETRY_COLOR_GIT_CONFLICTS_SOLVED=${GEOMETRY_COLOR_GIT_CONFLICTS_SOLVED:-green}
 GEOMETRY_COLOR_GIT_BRANCH=${GEOMETRY_COLOR_GIT_BRANCH:-242}
 
+
+# -- git prompt status
+#
+if [[ $TERM = *256color* || $TERM = *rxvt* ]]; then
+    turquoise="%F{81}"
+    orange="$FG[166]"
+    cloudBlue="$FG[033]"
+    purple="$FG[135]"
+    hotpink="%F{161}"
+    limegreen="%F{118}"
+    darkerBlue="%F{111}"
+    purpleBlue="%F{63}"
+    darkYellow="$FG[214]"
+	gray="$FG[245]"
+    lightgreen="$FG[106]"
+else
+    turquoise="$fg[cyan]"
+    orange="$fg[yellow]"
+    purple="$fg[magenta]"
+    cloudBlue="$fg[magnenta]"
+    hotpink="$fg[red]"
+    limegreen="$fg[green]"
+    darkerBlue="$fg[blue]"
+    purpleBlue="$fg[blue]"
+    darkYellow="$fg[yellow]"
+	gray="$fg[8]"
+    lightgreen="$FG[112]"
+fi
+
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$lightgreen%} ✔" # Ⓞ
+
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$orange%}☂ " # ☀ⓣ
+ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%}✚" # ⓐ ⑃
+ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}✐"  # ⓜ ⑁⚡
+ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}✖" # ⓧ ⑂
+ZSH_THEME_GIT_PROMPT_RENAMED="%{$orange%}✐" # ⓡ ⑄➜
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%} ♒" # ⓤ ⑊
+# ZSH_THEME_GIT_PROMPT_AHEAD="%{$purple%}⚑"
+ZSH_THEME_GIT_PROMPT_AHEAD=""
+
+
 # Symbol definitions
 GEOMETRY_SYMBOL_GIT_DIRTY=${GEOMETRY_SYMBOL_GIT_DIRTY:-"⬡"}
 GEOMETRY_SYMBOL_GIT_CLEAN=${GEOMETRY_SYMBOL_GIT_CLEAN:-"⬢"}
@@ -18,21 +59,24 @@ GEOMETRY_SYMBOL_GIT_CONFLICTS_UNSOLVED=${GEOMETRY_SYMBOL_GIT_CONFLICTS_UNSOLVED:
 
 # Combine color and symbols
 GEOMETRY_GIT_DIRTY=$(prompt_geometry_colorize $GEOMETRY_COLOR_GIT_DIRTY $GEOMETRY_SYMBOL_GIT_DIRTY)
-GEOMETRY_GIT_CLEAN=$(prompt_geometry_colorize $GEOMETRY_COLOR_GIT_CLEAN $GEOMETRY_SYMBOL_GIT_CLEAN)
+# GEOMETRY_GIT_CLEAN=$(prompt_geometry_colorize $GEOMETRY_COLOR_GIT_CLEAN $GEOMETRY_SYMBOL_GIT_CLEAN)
+GEOMETRY_GIT_CLEAN=${ZSH_THEME_GIT_PROMPT_CLEAN}
 GEOMETRY_GIT_BARE=$(prompt_geometry_colorize $GEOMETRY_COLOR_GIT_BARE $GEOMETRY_SYMBOL_GIT_BARE)
 GEOMETRY_GIT_REBASE=$GEOMETRY_SYMBOL_GIT_REBASE
 GEOMETRY_GIT_UNPULLED=$GEOMETRY_SYMBOL_GIT_UNPULLED
 GEOMETRY_GIT_UNPUSHED=$GEOMETRY_SYMBOL_GIT_UNPUSHED
 
 # Flags
-PROMPT_GEOMETRY_GIT_CONFLICTS=${PROMPT_GEOMETRY_GIT_CONFLICTS:-false}
+PROMPT_GEOMETRY_GIT_CONFLICTS=${PROMPT_GEOMETRY_GIT_CONFLICTS:-true}
 PROMPT_GEOMETRY_GIT_TIME=${PROMPT_GEOMETRY_GIT_TIME:-true}
 PROMPT_GEOMETRY_GIT_TIME_LONG_FORMAT=${PROMPT_GEOMETRY_GIT_TIME_LONG_FORMAT:-false}
-PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY=${PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY:-true}
+# PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY=${PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY:-true}
+PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY=${PROMPT_GEOMETRY_GIT_TIME_SHOW_EMPTY:-false}
 
 # Misc configurations
 GEOMETRY_GIT_NO_COMMITS_MESSAGE=${GEOMETRY_GIT_NO_COMMITS_MESSAGE:-"no commits"}
-GEOMETRY_GIT_SEPARATOR=${GEOMETRY_GIT_SEPARATOR:-"::"}
+# GEOMETRY_GIT_SEPARATOR=${GEOMETRY_GIT_SEPARATOR:-"::"}
+GEOMETRY_GIT_SEPARATOR="¦"
 
 prompt_geometry_git_time_since_commit() {
   # Defaults to "", which would hide the git_time_since_commit block
@@ -58,14 +102,18 @@ prompt_geometry_git_branch() {
 }
 
 prompt_geometry_git_status() {
-  if test -z "$(git status --porcelain --ignore-submodules HEAD)"; then
-    if test -z "$(git ls-files --others --modified --exclude-standard)"; then
-      echo $GEOMETRY_GIT_CLEAN
-    else
-      echo $GEOMETRY_GIT_DIRTY
-    fi
+  if test -z "$(git status --porcelain --ignore-submodules)"; then
+    echo $GEOMETRY_GIT_CLEAN"%{$reset_color%}"
+    # if test -z "$(git ls-files --others --modified --exclude-standard)"; then
+    #   echo $GEOMETRY_GIT_CLEAN
+    # else
+    #   echo $GEOMETRY_GIT_DIRTY
+    # fi
+    #  echo "$(git_prompt_status)"
   else
-    echo $GEOMETRY_GIT_DIRTY
+    # echo $GEOMETRY_GIT_DIRTY
+    echo "$(git_prompt_status)%{$reset_color%}"
+
   fi
 }
 
